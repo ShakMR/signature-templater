@@ -1,0 +1,16 @@
+@keyframes fade-in-out {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 100%;
+  }
+  100% {
+    opacity: 0%;
+  }
+}
+.highlighter {
+  position: absolute;
+  animation: fade-in-out .5s ease-in-out forwards;
+  background-color: rgba(1, 1, 1, 0.1);
+}

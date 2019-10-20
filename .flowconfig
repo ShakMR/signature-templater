@@ -1,0 +1,12 @@
+module.name_mapper.extension='scss' -> 'empty/object'
+[ignore]
+
+[include]
+
+[libs]
+
+[lints]
+
+[options]
+
+[strict]

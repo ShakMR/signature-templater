@@ -1,0 +1,9 @@
+@import '~bpk-mixins/index';
+
+.button {
+  @include bpk-button;
+}
+
+.button--secondary {
+  @include bpk-button--secondary;
+}

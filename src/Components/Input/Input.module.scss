@@ -1,0 +1,10 @@
+@import '~bpk-mixins/index';
+
+.input {
+  @include bpk-input;
+  box-sizing: border-box;
+}
+
+.label {
+  @include bpk-label;
+}
