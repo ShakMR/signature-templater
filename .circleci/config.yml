@@ -15,7 +15,6 @@ jobs:
             # fallback to using the latest cache if no exact match is found
             - v1-dependencies-
       - run: |
-          cd ./service
           npm install
       - save_cache:
           paths:
@@ -23,10 +22,8 @@ jobs:
           key: v1-dependencies-{{ checksum "./service/package.json" }}
       - run: |
           echo $CIRCLE_PROJECT_REPONAME
-          cd ./service
           npm build
       - run: |
-          cd ./service
           npm test
   release:
     docker:
