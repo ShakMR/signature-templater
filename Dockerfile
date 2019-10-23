@@ -19,4 +19,4 @@ ENV LETSENCRYPT_EMAIL=borja.arias.upc@gmail.com
 
 EXPOSE 5000
 
-CMD [ "serve", "-s build" ]
+CMD [ "serve", "-s", "build" ]
