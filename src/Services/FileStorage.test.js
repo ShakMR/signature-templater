@@ -19,7 +19,7 @@ describe('FileStorage', () => {
       const calls = localStorage.setItem.mock.calls;
       expect(calls[0][0]).toEqual(filename);
       expect(calls[0][1]).toEqual(content);
-      expect(calls[1][1]).toEqual([filename]);
+      expect(calls[1][1]).toEqual(filename);
     });
 
     it('should add to the index a new filename if the index already exists', () => {

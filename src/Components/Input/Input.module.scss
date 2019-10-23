@@ -3,6 +3,15 @@
 .input {
   @include bpk-input;
   box-sizing: border-box;
+
+  &__button {
+    @include bpk-button;
+    @include bpk-button--secondary;
+  }
+
+  &-wrapper {
+    display: flex;
+  }
 }
 
 .label {

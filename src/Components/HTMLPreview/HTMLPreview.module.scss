@@ -9,8 +9,14 @@
     opacity: 0%;
   }
 }
+
 .highlighter {
   position: absolute;
   animation: fade-in-out .5s ease-in-out forwards;
   background-color: rgba(1, 1, 1, 0.1);
+}
+
+.done-wrapper {
+  text-align: right;
+  padding: 1rem;
 }

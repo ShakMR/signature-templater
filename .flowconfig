@@ -1,12 +1,13 @@
-module.name_mapper.extension='scss' -> 'empty/object'
 [ignore]
 
 [include]
+.*/src/.*
 
 [libs]
 
 [lints]
 
 [options]
+module.name_mapper.extension='scss' -> 'CSSModule'
 
 [strict]

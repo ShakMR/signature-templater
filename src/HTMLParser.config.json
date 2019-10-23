@@ -9,7 +9,17 @@
   "img": {
     "id": "alt",
     "params": [
-      "src"
+      "src",
+      {
+        "name": "width",
+        "related": "height",
+        "relation": "maintainRatio"
+      },
+      {
+        "name": "height",
+        "related": "width",
+        "relation": "maintainRatio"
+      }
     ]
   }
 }

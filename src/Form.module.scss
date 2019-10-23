@@ -4,4 +4,8 @@
   @extend .row;
 
   text-align: left;
+
+  &:last-child {
+    text-align: left;
+  }
 }

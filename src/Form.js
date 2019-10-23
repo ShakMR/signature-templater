@@ -1,20 +1,33 @@
 import React, { Component } from 'react';
 
 import Input from './Components/Input';
-import Button from './Components/Button';
-import LoadFile from './Services/LoadFile';
 import HTMLParserConfig from './HTMLParser.config';
 import HTMLParserService from './Services/HTMLParser';
 import type { Field } from './Types/Field';
 
 import style from './Form.module.scss';
 import Preview from './Components/HTMLPreview/HTMLPreview';
+import FileStorage from './Services/FileStorage';
 
 type State = {
   fields: Array<Field>,
   changed: string,
   html: string,
 }
+
+const keywords = {
+  a: 'link',
+  href: 'url',
+  img: 'image',
+  src: 'source',
+  innerHTML: 'displayable text',
+  width: 'width',
+  height: 'height',
+};
+
+const findReplacement = (keyword) => {
+  return keywords[keyword];
+};
 
 class Form extends Component<null, State> {
   state = {
@@ -26,11 +39,8 @@ class Form extends Component<null, State> {
 
   parseTemplate = async (location) => {
     const searchParams = new URLSearchParams(location.search);
-    const filePath = searchParams.get('file');
-    const type = searchParams.get('type');
-    const fileContent = type && type === 'url'
-      ? await LoadFile.loadFromURL(filePath)
-      : await LoadFile.loadFromFile(filePath);
+    const filename = searchParams.get('file');
+    const fileContent = FileStorage.get(filename);
     return this.parser.parseContent(fileContent);
   };
 
@@ -56,6 +66,21 @@ class Form extends Component<null, State> {
     });
   };
 
+  relatedChange = (func) => ({ target: { name, value } }: Event): void => {
+    debugger;
+    const relatedParamChange = func(value);
+    this.inputChange({target: { name, value }});
+    this.inputChange({target: { name: relatedParamChange.key, value: relatedParamChange.value }})
+  };
+
+  inputChangeFactory = (func) => {
+    console.log(func);
+    if (!func) {
+      return this.inputChange;
+    }
+    return this.relatedChange(func);
+  };
+
   clearChanged = (): void => {
     console.log('clear');
     this.setState({
@@ -79,15 +104,17 @@ class Form extends Component<null, State> {
                 const key = `${field.id}|${field.param}`;
                 return (
                   <div key={key} className={style.form__row}>
-                    <Input onChange={this.inputChange} onBlur={this.clearChanged} labelText={`${field.tag} ${field.param}`} name={key} value={field.value}/>
+                    <Input
+                      onChange={this.inputChangeFactory(field.func)}
+                      onBlur={this.clearChanged}
+                      labelText={`${findReplacement(field.tag)} ${findReplacement(field.param)}`}
+                      name={key} value={field.value}
+                    />
                   </div>
                 )
               }
             )
           }
-          <div className={style.row}>
-            <Button>Done</Button>
-          </div>
         </div>
       </div>
     );

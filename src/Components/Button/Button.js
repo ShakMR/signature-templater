@@ -4,8 +4,9 @@ import React from 'react';
 import styles from './Button.module.scss';
 
 type Props = {
-  secondary: Boolean,
+  secondary: boolean,
   className: string,
+  onClick: (Event) => void,
 }
 
 const Button = (props: Props): React$Node => {
@@ -17,6 +18,7 @@ const Button = (props: Props): React$Node => {
 Button.defaultProps = {
   secondary: false,
   className: '',
+  onClick: () => {},
 };
 
 export default Button;

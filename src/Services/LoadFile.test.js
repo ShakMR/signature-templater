@@ -9,9 +9,9 @@ describe('LoadFile', () => {
   describe('loadFromFile', () => {
     it('should return content from file', async () => {
       const fileContent = 'content';
-      fs.readFile.mockImplementation((_, f) => f(null, fileContent));
+      const file = new File([fileContent], 'file.txt');
 
-      await expect(LoadFile.loadFromFile('file')).resolves.toEqual(fileContent);
+      await expect(LoadFile.loadFromFile(file)).resolves.toEqual(fileContent);
     });
 
     it('should reject if error', async () => {

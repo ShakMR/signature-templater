@@ -1,9 +1,21 @@
 // @flow
 import React, { Component } from 'react';
-import type { Element, ElementRef } from 'react';
+
 import type { Field } from '../../Types/Field';
+import type { ReactRef } from '../../Types/Ref';
+
+import Button from '../Button';
 
 import style from './HTMLPreview.module.scss';
+
+type ScrollComponents = HTMLElement & {
+  scrollLeft: number,
+  scrollTop: number,
+}
+
+type HTMLDocument = Document & {
+  documentElement: ScrollComponents | null,
+}
 
 type Props = {
   html: string,
@@ -13,25 +25,26 @@ type Props = {
 
 type State = {
   fragment: HTMLElement,
-  elementsById: Map<string, HTMLElement>,
+  elementsById: any,
 };
 
-function offset(el) {
-  var rect = el.getBoundingClientRect(),
-    scrollLeft = window.pageXOffset || document.documentElement.scrollLeft,
-    scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+function offset(el: ?HTMLElement): { top: number, left: number } {
+  if (!el) return { top: 0, left: 0 };
+  const rect = el.getBoundingClientRect(); 
+  const scrollLeft = window.pageXOffset || ((document: HTMLDocument).documentElement || {} ).scrollLeft;
+  const scrollTop = window.pageYOffset || ((document: HTMLDocument).documentElement || {} ).scrollTop;
   return { top: rect.top + scrollTop, left: rect.left + scrollLeft }
 }
 
 class Preview extends Component<Props, State> {
-  highlighter: ElementRef;
+  highlighter: ReactRef;
 
   static defaultProps = {
     html: '',
     vars: {},
   };
 
-  constructor(props) {
+  constructor(props: Props) {
     super(props);
     this.state = {
       fragment: document.createElement('div'),
@@ -46,28 +59,37 @@ class Preview extends Component<Props, State> {
     if (nextProps.html) {
       fragment.innerHTML = nextProps.html;
       for (let el of fragment.getElementsByTagName('*')) {
+        if (el.tagName === 'IMG') {
+          el.addEventListener('load', () => {
+            console.log('finished loading');
+            this.forceUpdate();
+          })
+        }
         elementsById[el.id] = el;
       }
       nextState = {
         fragment,
-        elementsById
       };
     }
-    if (nextProps.changed || fragment.innerHTML === '') {
-      nextProps.vars.forEach(({ id, param, value }: Field) => {
-        elementsById[id][param] = value;
-      });
-      nextState = {
-        elementsById,
-      };
-    }
+    nextProps.vars.forEach(({ id, param, value }: Field) => {
+      elementsById[id][param] = value;
+    });
+    nextState = {
+      ...nextState,
+      elementsById,
+    };
     if (!nextState) {
       return;
     }
     this.setState(nextState);
   }
 
-  render(): Element {
+  displayNewTemplate = (): void => {
+    const newWindow: window = window.open();
+    newWindow.document.write(this.state.fragment.innerHTML);
+  };
+
+  render() {
     if (!this.props.html) {
       return '';
     }
@@ -75,18 +97,26 @@ class Preview extends Component<Props, State> {
     return <div>
       <div className={style.highlighter} ref={this.highlighter} />
       <div dangerouslySetInnerHTML={{ __html: fragment.innerHTML }}/>
+      <div className={style["done-wrapper"]}>
+        <Button onClick={this.displayNewTemplate}>Done</Button>
+      </div>
     </div>;
   }
 
   componentDidUpdate(): void {
     if (this.highlighter.current && this.props.changed) {
-      const highlighter = this.highlighter.current;
-      const changedElement = document.getElementById(this.props.changed);
-      const elementOffset = offset(changedElement);
-      highlighter.style.top = `${elementOffset.top}px`;
-      highlighter.style.left = `${elementOffset.left}px`;
-      highlighter.style.height = `${changedElement.offsetHeight}px`;
-      highlighter.style.width = `${changedElement.offsetWidth}px`;
+      setTimeout(() => {
+        const highlighter = this.highlighter.current;
+        const changedElement: ?HTMLElement = document.getElementById(this.props.changed);
+        const elementOffset = offset(changedElement);
+        highlighter.style.top = `${elementOffset.top}px`;
+        highlighter.style.left = `${elementOffset.left}px`;
+        highlighter.style.height = `${(changedElement || {}).offsetHeight}px`;
+        highlighter.style.width = `${(changedElement || {}).offsetWidth}px`;
+        this.highlighter.current.style.opacity = 1;
+      }, 250);
+    } else if (this.highlighter.current && !this.props.changed) {
+      this.highlighter.current.style.opacity = 0;
     }
   }
 }

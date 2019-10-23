@@ -1,26 +1,37 @@
+// @flow
 import React from 'react';
-import PropTypes from 'prop-types';
 
 import styles from './Input.module.scss';
+import type { ReactRef } from '../../Types/Ref';
 
-const Input = (props) => {
-  const { className, labelText, ...rest } = props;
+type Props = {
+  className: string,
+  labelText: string,
+  onFinishedClick: () => void,
+  type: string
+};
+
+export const INPUT_TYPES = {
+  CONFIRMATION: 'confirmation',
+};
+
+const Input = (props: Props, ref: ReactRef) => {
+  const { className, labelText, type, ...rest } = props;
   const classNames = [styles.input, className];
   return (<div>
     <label className={styles.label}>
       {labelText}
     </label>
-    <input {...rest} className={classNames.join(' ')} />
+    <div className={styles['input-wrapper']}>
+      <input {...rest} ref={ref} className={classNames.join(' ')} />
+      { type === INPUT_TYPES.CONFIRMATION && <button className={styles['input__button']} onClick={props.onFinishedClick}><span role="img" aria-label="done">👍</span></button> }
+    </div>
   </div>);
-};
-
-Input.propTypes = {
-  className: PropTypes.string,
-  labelText: PropTypes.string.isRequired,
 };
 
 Input.defaultTypes = {
   className: '',
+  type: null,
 };
 
-export default Input;
+export default React.forwardRef<Props, 'input'>(Input);

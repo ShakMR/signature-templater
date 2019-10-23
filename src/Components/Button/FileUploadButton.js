@@ -1,15 +1,21 @@
 // @flow
 import React, { Component, Fragment } from 'react';
-import type { ElementRef } from 'react';
+import type { ReactRef } from '../../Types/Ref';
 
 import Button from './Button';
 
+type UploadFileEvent = {
+  target: {
+    files: FileList,
+  },
+};
+
 type Props = {
-  onFileSelected: (FileList) => void,
+  onFileSelected: (UploadFileEvent) => void,
 }
 
 class FileUploadButton extends Component<Props> {
-  inputRef: ElementRef;
+  inputRef: ReactRef;
 
   constructor(props: Props) {
     super(props);

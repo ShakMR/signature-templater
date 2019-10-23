@@ -5,8 +5,8 @@ export default class {
 
   static save(fileName: string, content: string): void {
     localStorage.setItem(fileName, content);
-    let filesIndexContent = localStorage.getItem(this.filesIndex);
-    if (filesIndexContent === null) {
+    let filesIndexContent: string = localStorage.getItem(this.filesIndex) || '';
+    if (!filesIndexContent) {
       localStorage.setItem(this.filesIndex, fileName);
     } else {
       if (filesIndexContent.indexOf(fileName) === -1) {
@@ -17,10 +17,10 @@ export default class {
   }
 
   static get(fileName: string): string {
-    return localStorage.getItem(fileName);
+    return localStorage.getItem(fileName) || '';
   }
 
   static getAllFileNames(): Array<string> {
-    return localStorage.getItem(this.filesIndex).split(',');
+    return (localStorage.getItem(this.filesIndex) || '').split(',');
   }
 };

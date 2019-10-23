@@ -1,0 +1,19 @@
+@keyframes rotate {
+  0% {
+    rotation: 0deg;
+  }
+  50% {
+    rotation: 180deg;
+  }
+
+  75% {
+    rotation: 270deg;
+  }
+  100% {
+    rotation: 359deg;
+  }
+}
+
+.spinner {
+  animation: rotate 1s linear infinite;
+}

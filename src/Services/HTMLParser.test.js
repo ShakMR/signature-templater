@@ -1,6 +1,7 @@
 import HTMLParser from './HTMLParser';
 
-jest.mock('uuid/v4', () => () => 'uuid');
+let mocki = 0;
+jest.mock('uuid/v4', () => () => 'uuid' + mocki++);
 
 describe('HTMLParser', () => {
   it('should do things', () => {
@@ -32,7 +33,7 @@ describe('HTMLParser', () => {
         "id": "title",
         "params": [
           "href",
-          "inneHtml"
+          "innerHTML"
         ]
       },
       "img": {
@@ -42,6 +43,13 @@ describe('HTMLParser', () => {
         ]
       }
     });
-    parser.parseContent(template);
+    const parserResult = parser.parseContent(template);
+    expect(parserResult.html).toEqual(expect.any(String));
+    expect(parserResult.fields.length).toEqual(5);
+    expect(parserResult.fields[0].tag).toEqual('img');
+    expect(parserResult.fields[1].tag).toEqual('a');
+    expect(parserResult.fields[2].tag).toEqual('a');
+    expect(parserResult.fields[3].tag).toEqual('a');
+    expect(parserResult.fields[4].tag).toEqual('a');
   });
 });
