@@ -8,6 +8,8 @@
 [lints]
 
 [options]
-module.name_mapper.extension='scss' -> 'CSSModule'
+module.file_ext=.js
+module.file_ext=.scss
+module.name_mapper.extension='scss' -> 'empty/object'
 
 [strict]

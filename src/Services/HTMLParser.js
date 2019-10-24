@@ -22,11 +22,11 @@ type BuildRelationFunction = (any, string, string) => RelationFunction;
 
 export default class {
   config: ParserConfig;
-  relationsMap: Map<string, BuildReationFunction>;
+  relationsMap: Map<string, BuildRelationFunction>;
 
   constructor(config: ParserConfig) {
     this.config = config;
-    this.relationsMap = new Map<string, (any) => any>();
+    this.relationsMap = new Map<string, BuildRelationFunction>();
     this.relationsMap.set('maintainRatio', this.maintainRatio);
   }
 
@@ -65,7 +65,7 @@ export default class {
         ret = { ...ret, ...this.resolveObjectParam(element, param) };
       }
       return ret;
-    })
+    });
   }
 
   maintainRatio: BuildRelationFunction = (element: any, param1: string, param2: string): RelationFunction => {
@@ -76,12 +76,12 @@ export default class {
     };
   };
 
-  resolveStringParam(element: any, param: string) {
+  resolveStringParam(element: any, param: string): Field {
     const value = element[param].replace(/[\t\n]/g,'');
     return ({ param, value })
   }
 
-  resolveObjectParam(element: any, param: ObjectConfigParam) {
+  resolveObjectParam(element: any, param: ObjectConfigParam): Field {
     const value = element[param.name];
     let func: RelationFunction;
     if (Object.getOwnPropertyNames(this).includes(param.relation)) {
