@@ -7,7 +7,7 @@ COPY package.json /usr/src/app
 COPY src /usr/src/app/src
 COPY package-lock.json /usr/src/app
 COPY public /usr/src/app/public
-COPY server.js /usr/src/app
+COPY serve.js /usr/src/app
 
 ENV NODE_ENV=production
 
@@ -19,4 +19,4 @@ ENV LETSENCRYPT_EMAIL=borja.arias.upc@gmail.com
 
 EXPOSE 5000
 
-CMD [ "node", "server.js" ]
+CMD [ "npm", "start:server" ]
