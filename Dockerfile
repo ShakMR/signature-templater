@@ -7,7 +7,7 @@ COPY package.json /usr/src/app
 COPY src /usr/src/app/src
 COPY package-lock.json /usr/src/app
 COPY public /usr/src/app/public
-COPY serve.js /usr/src/app
+COPY server.js /usr/src/app
 
 ENV NODE_ENV=production
 
