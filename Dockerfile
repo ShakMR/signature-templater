@@ -19,4 +19,4 @@ ENV LETSENCRYPT_EMAIL=borja.arias.upc@gmail.com
 
 EXPOSE 5000
 
-CMD [ "npm", "start:server" ]
+CMD [ "npm", "run", "start:server" ]
