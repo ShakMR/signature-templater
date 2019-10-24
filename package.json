@@ -25,17 +25,21 @@
     ]
   },
   "devDependencies": {
-    "bpk-mixins": "^19.0.5",
+    "bpk-mixins": "^19.0.10",
     "flow-bin": "^0.109.0",
     "jest-localstorage-mock": "^2.4.0",
-    "nock": "^11.4.0",
-    "node-sass": "^4.12.0",
+    "nock": "^11.6.0",
+    "node-sass": "^4.13.0",
     "prop-types": "^15.7.2",
     "query-string": "^6.8.3",
-    "react": "^16.10.2",
-    "react-dom": "^16.10.2",
+    "react": "^16.11.0",
+    "react-dom": "^16.11.0",
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.2.0",
     "uuid": "^3.3.3"
+  },
+  "dependencies": {
+    "finalhandler": "^1.1.2",
+    "serve-static": "^1.14.1"
   }
 }

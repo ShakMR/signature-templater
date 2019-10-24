@@ -11,7 +11,6 @@ COPY public /usr/src/app/public
 ENV NODE_ENV=production
 
 RUN npm install
-RUN npm install -g serve
 
 ENV VIRTUAL_HOST=signat.suilabs.com
 ENV LETSENCRYPT_HOST=signat.suilabs.com
@@ -19,4 +18,4 @@ ENV LETSENCRYPT_EMAIL=borja.arias.upc@gmail.com
 
 EXPOSE 5000
 
-CMD [ "serve", "-s", "build" ]
+CMD [ "node", "server.js" ]
