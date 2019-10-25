@@ -34,6 +34,7 @@ jobs:
           command: |
             sudo apt update
             sudo apt install -y rsync
+            npm run build
             cd scripts
             bash updateRepo.sh
 
