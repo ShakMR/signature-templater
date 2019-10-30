@@ -1,6 +1,12 @@
 import FileStorage from './FilesStorage';
 
 describe('FileStorage', () => {
+  let storage;
+
+  beforeEach(() => {
+    storage = new FileStorage(localStorage);
+  });
+
   afterEach(() => {
     localStorage.clear();
     localStorage.setItem.mockClear();
@@ -14,7 +20,7 @@ describe('FileStorage', () => {
     const content2 = 'content2';
 
     it('should store the file content and name on save', () => {
-      FileStorage.save(filename, content);
+      storage.save(filename, content);
       expect(localStorage.setItem).toHaveBeenCalledTimes(2);
       const calls = localStorage.setItem.mock.calls;
       expect(calls[0][0]).toEqual(filename);
@@ -23,15 +29,15 @@ describe('FileStorage', () => {
     });
 
     it('should add to the index a new filename if the index already exists', () => {
-      FileStorage.save(filename, content);
-      FileStorage.save(filename2, content);
+      storage.save(filename, content);
+      storage.save(filename2, content);
       expect(localStorage.setItem).toHaveBeenCalledTimes(4);
       expect(localStorage.setItem.mock.calls[3][1]).toEqual('filename,filename2');
     });
 
     it('should override already existing file', () => {
-      FileStorage.save(filename, content);
-      FileStorage.save(filename, content2);
+      storage.save(filename, content);
+      storage.save(filename, content2);
       expect(localStorage.setItem).toHaveBeenCalledTimes(4);
       expect(localStorage.setItem.mock.calls[3][1]).toEqual('filename');
       expect(localStorage.getItem(filename)).toEqual(content2);
@@ -39,20 +45,20 @@ describe('FileStorage', () => {
   });
 
   describe('get', () => {
-    it('should return content stored', () => {
+    it('should return content stored', async () => {
       const filename = 'filename';
       const content = 'content';
-      FileStorage.save(filename, content);
-      expect(FileStorage.get(filename)).toEqual(content);
+      storage.save(filename, content);
+      await expect(storage.get(filename)).resolves.toEqual(content);
     });
   });
 
   describe('getAllFileNames', () => {
-    it('should return content stored', () => {
+    it('should return content stored', async () => {
       const filename = 'filename';
       const content = 'content';
-      FileStorage.save(filename, content);
-      expect(FileStorage.getAllFileNames()).toEqual([filename]);
+      storage.save(filename, content);
+      await expect(storage.getAllFileNames()).resolves.toEqual([filename]);
     });
   });
 });
