@@ -1,4 +1,10 @@
 {
+  "span": {
+    "id": "id",
+    "params": [
+      "innerHTML"
+    ]
+  },
   "a": {
     "id": "title",
     "params": [

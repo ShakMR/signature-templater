@@ -1,21 +1,29 @@
 // @flow
 import React, { Component, Fragment } from 'react';
-import { Link } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 
 import Button from './Components/Button';
 import FileUploadButton from './Components/Button/FileUploadButton';
 import Input, { INPUT_TYPES } from "./Components/Input";
 import LoadFile from './Services/LoadFile';
-import FileStorage from './Services/FileStorage';
 import Spinner from './Components/Spinner/Spinner';
 
-import styles from './Main.module.scss';
+import withLocalStorage from './HoC/WithStorageFiles';
+
 import type { ReactRef } from './Types/Ref';
+
+import styles from './Main.module.scss';
+import StoredFileSelectorModal from './Components/Modal/StoredFileSelectorModal';
 
 type State = {
   filenameSelected: ?string,
   savingFile: boolean,
+  isModalOpen: boolean
 }
+
+type Props = {
+  history: any,
+};
 
 type UploadFileEvent = {
   target: {
@@ -23,11 +31,12 @@ type UploadFileEvent = {
   },
 };
 
-class Main extends Component<{}, State> {
+class Main extends Component<Props, State> {
   inputRef: ReactRef = React.createRef();
   state: State = {
     filenameSelected: null,
     savingFile: false,
+    isModalOpen: false,
   };
 
   onFileSelected = (e: UploadFileEvent): void => {
@@ -36,7 +45,7 @@ class Main extends Component<{}, State> {
       savingFile: true,
     }, async () => {
       const fileContent = await LoadFile.loadFromFile(file);
-      FileStorage.save(file.name, fileContent);
+      await this.props.storage.save(file.name, fileContent);
       this.setState({
         savingFile: false,
         filenameSelected: file.name,
@@ -57,7 +66,7 @@ class Main extends Component<{}, State> {
       }, async () => {
         const fileContent = await LoadFile.loadFromURL(fileURL);
         const filename = fileURL.split('/').pop();
-        FileStorage.save(filename, fileContent);
+        await this.props.storage.save(filename, fileContent);
         this.setState({
           savingFile: false,
           filenameSelected: filename,
@@ -65,8 +74,24 @@ class Main extends Component<{}, State> {
       })
   };
 
+  switchModalState = () => {
+    this.setState({
+      isModalOpen: !this.state.isModalOpen
+    })
+  };
+
+  handleFileSelectedFromStorage = async (filename: string): void => {
+    this.setState({
+      filenameSelected: filename,
+    });
+  };
+
+  navigateForward = () => {
+    this.props.history.go(`/form?file=${this.state.filenameSelected}`);
+  };
+
   render() {
-    const { savingFile, filenameSelected } = this.state;
+    const { savingFile, filenameSelected, isModalOpen } = this.state;
     return (
       <div className={styles.app}>
         <div className={styles.column}>
@@ -94,22 +119,21 @@ class Main extends Component<{}, State> {
                     <Input type={INPUT_TYPES.CONFIRMATION} ref={this.inputRef} onFinishedClick={this.onURLFinished} labelText="2. Template Url"/>
                   </div>
                   <div className={styles.row}>
-                    <Button secondary disabled>3. Choose Stored Template</Button>
+                    <Button secondary onClick={this.switchModalState}>3. Choose Stored Template</Button>
                   </div>
               </Fragment>
           }
           <div className={[styles.row, filenameSelected && styles['buttons-row']].join(' ')}>
             { filenameSelected && <Button onClick={this.clearSelectedFile}>Back</Button> }
-            <Link to={filenameSelected && `/form?file=${filenameSelected}`}>
-              <Button>
-                GO!
-              </Button>
-            </Link>
+            <Button onClick={this.navigateForward} disabled={!filenameSelected}>
+              GO!
+            </Button>
           </div>
         </div>
+        { isModalOpen && <StoredFileSelectorModal opened={false} onSelect={this.handleFileSelectedFromStorage} onClose={this.switchModalState} /> }
       </div>
     );
   }
 }
 
-export default Main;
+export default withRouter(withLocalStorage(Main));

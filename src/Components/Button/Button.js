@@ -3,7 +3,7 @@ import React from 'react';
 
 import styles from './Button.module.scss';
 
-type Props = {
+type Props = HTMLButtonElement & {
   secondary: boolean,
   className: string,
   onClick: (Event) => void,

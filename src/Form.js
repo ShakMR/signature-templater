@@ -7,7 +7,7 @@ import type { Field } from './Types/Field';
 
 import style from './Form.module.scss';
 import Preview from './Components/HTMLPreview/HTMLPreview';
-import FileStorage from './Services/FileStorage';
+import withLocalStorage from './HoC/WithStorageFiles';
 
 type State = {
   fields: Array<Field>,
@@ -26,7 +26,7 @@ const keywords = {
 };
 
 const findReplacement = (keyword) => {
-  return keywords[keyword];
+  return keywords[keyword] || keyword;
 };
 
 class Form extends Component<null, State> {
@@ -40,7 +40,7 @@ class Form extends Component<null, State> {
   parseTemplate = async (location) => {
     const searchParams = new URLSearchParams(location.search);
     const filename = searchParams.get('file');
-    const fileContent = FileStorage.get(filename);
+    const fileContent = await this.props.storage.get(filename);
     return this.parser.parseContent(fileContent);
   };
 
@@ -67,7 +67,6 @@ class Form extends Component<null, State> {
   };
 
   relatedChange = (func) => ({ target: { name, value } }: Event): void => {
-    debugger;
     const relatedParamChange = func(value);
     this.inputChange({target: { name, value }});
     this.inputChange({target: { name: relatedParamChange.key, value: relatedParamChange.value }})
@@ -121,4 +120,4 @@ class Form extends Component<null, State> {
   }
 }
 
-export default Form;
+export default withLocalStorage(Form);

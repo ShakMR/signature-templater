@@ -16,7 +16,7 @@ export const INPUT_TYPES = {
 };
 
 const Input = (props: Props, ref: ReactRef) => {
-  const { className, labelText, type, ...rest } = props;
+  const { className, labelText, type, onFinishedClick, ...rest } = props;
   const classNames = [styles.input, className];
   return (<div>
     <label className={styles.label}>
@@ -24,7 +24,7 @@ const Input = (props: Props, ref: ReactRef) => {
     </label>
     <div className={styles['input-wrapper']}>
       <input {...rest} ref={ref} className={classNames.join(' ')} />
-      { type === INPUT_TYPES.CONFIRMATION && <button className={styles['input__button']} onClick={props.onFinishedClick}><span role="img" aria-label="done">👍</span></button> }
+      { type === INPUT_TYPES.CONFIRMATION && <button className={styles['input__button']} onClick={onFinishedClick}><span role="img" aria-label="done">👍</span></button> }
     </div>
   </div>);
 };

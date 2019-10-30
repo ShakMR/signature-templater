@@ -1,0 +1,39 @@
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fade-out {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+  }
+}
+
+.modal {
+  position: absolute;
+  background-color: white;
+  z-index: 1;
+  border: 1px solid darkgray;
+  border-radius: 5px;
+  padding: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  min-width: 50%;
+  min-height: 20%;
+  box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.4);
+
+  animation: fade-in .3s ease-in-out forwards;
+}
+
+.fade-out {
+  animation: fade-out .3s ease-in-out forwards;
+}

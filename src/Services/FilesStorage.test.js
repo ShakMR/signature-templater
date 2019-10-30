@@ -1,4 +1,4 @@
-import FileStorage from './FileStorage';
+import FileStorage from './FilesStorage';
 
 describe('FileStorage', () => {
   afterEach(() => {

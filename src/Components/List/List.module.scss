@@ -1,0 +1,15 @@
+@import "~bpk-mixins";
+
+.list {
+  @include bpk-list;
+  list-style-type: none;
+  margin-top: 1rem;
+
+  &-item {
+    @include bpk-list-item
+  }
+}
+
+.anchor {
+  @include bpk-link;
+}
