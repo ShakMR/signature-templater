@@ -4,6 +4,9 @@
 .*/src/.*
 
 [libs]
+./flow-typed
+./custom-types
+./custom-types/Services
 
 [lints]
 

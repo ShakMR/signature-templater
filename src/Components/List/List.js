@@ -6,7 +6,7 @@ import styles from './List.module.scss';
 
 type Props = {
   elements: Array<string>,
-  onItemClick: (index: string) => void,
+  onItemClick: (index: number) => void,
 }
 
 const List = ({ elements, onItemClick } : Props): Node => (

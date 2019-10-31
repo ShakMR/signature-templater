@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
+import type { Field } from 'html-parsing';
 
 import Input from './Components/Input';
 import HTMLParserConfig from './HTMLParser.config';
 import HTMLParserService from './Services/HTMLParser';
-import type { Field } from './Types/Field';
-
-import style from './Form.module.scss';
 import Preview from './Components/HTMLPreview/HTMLPreview';
 import withLocalStorage from './HoC/WithStorageFiles';
+
+import style from './Form.module.scss';
 
 type State = {
   fields: Array<Field>,

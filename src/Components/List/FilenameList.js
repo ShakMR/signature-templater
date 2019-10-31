@@ -1,6 +1,7 @@
 // @flow
 import React, { Component } from 'react';
-import FilesStorageInterface from '../../Services/FilesStorageInterface';
+import type { FilesStorage } from 'types/storage';
+
 import withLocalStorage from '../../HoC/WithStorageFiles';
 import List from './List';
 
@@ -9,7 +10,7 @@ type State = {
 };
 
 type Props = {
-  storage: FilesStorageInterface,
+  storage: FilesStorage,
   onSelect: (filename: string) => void,
 };
 

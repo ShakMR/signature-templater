@@ -1,17 +1,14 @@
 // @flow
 import React, { Component, Fragment } from 'react';
-import type { ReactRef } from '../../Types/Ref';
+import type { ReactRef } from 'react-helpers';
+import type { UploadFileEvent } from 'html-helpers';
 
 import Button from './Button';
-
-type UploadFileEvent = {
-  target: {
-    files: FileList,
-  },
-};
+import type { Node } from 'react';
 
 type Props = {
   onFileSelected: (UploadFileEvent) => void,
+  children: Node,
 }
 
 class FileUploadButton extends Component<Props> {
@@ -24,13 +21,18 @@ class FileUploadButton extends Component<Props> {
   }
 
   onButtonClick = (): void => {
-    this.inputRef.current.click();
+    if (this.inputRef.current) {
+      this.inputRef.current.click();
+    }
   };
 
   render() {
+    const { onFileSelected, children, ...rest } = this.props;
     return <Fragment>
-      <Button onClick={this.onButtonClick} {...this.props} />
-      <input onChange={this.props.onFileSelected} ref={this.inputRef} id="file-input" type="file" name="file" style={{ display: 'none' }}/>
+      <Button onClick={this.onButtonClick} {...rest}>
+        {children}
+      </Button>
+      <input onChange={onFileSelected} ref={this.inputRef} id="file-input" type="file" name="file" style={{ display: 'none' }}/>
     </Fragment>;
   }
 }

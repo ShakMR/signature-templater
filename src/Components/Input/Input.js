@@ -2,7 +2,6 @@
 import React from 'react';
 
 import styles from './Input.module.scss';
-import type { ReactRef } from '../../Types/Ref';
 
 type Props = {
   className: string,
@@ -15,7 +14,7 @@ export const INPUT_TYPES = {
   CONFIRMATION: 'confirmation',
 };
 
-const Input = (props: Props, ref: ReactRef) => {
+const Input = (props: Props, ref) => {
   const { className, labelText, type, onFinishedClick, ...rest } = props;
   const classNames = [styles.input, className];
   return (<div>
@@ -34,4 +33,4 @@ Input.defaultTypes = {
   type: null,
 };
 
-export default React.forwardRef<Props, 'input'>(Input);
+export default React.forwardRef<Props, HTMLInputElement>(Input);

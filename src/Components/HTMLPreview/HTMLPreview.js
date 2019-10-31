@@ -1,21 +1,11 @@
 // @flow
 import React, { Component } from 'react';
-
-import type { Field } from '../../Types/Field';
-import type { ReactRef } from '../../Types/Ref';
+import type { Field, HTMLDocument } from 'html-parsing';
+import type { ReactRef } from 'react-helpers';
 
 import Button from '../Button';
 
 import style from './HTMLPreview.module.scss';
-
-type ScrollComponents = HTMLElement & {
-  scrollLeft: number,
-  scrollTop: number,
-}
-
-type HTMLDocument = Document & {
-  documentElement: ScrollComponents | null,
-}
 
 type Props = {
   html: string,
@@ -30,13 +20,13 @@ type State = {
 
 function offset(el: ?HTMLElement): { top: number, left: number } {
   if (!el) return { top: 0, left: 0 };
-  const rect = el.getBoundingClientRect(); 
+  const rect = el.getBoundingClientRect();
   const scrollLeft = window.pageXOffset || ((document: HTMLDocument).documentElement || {} ).scrollLeft;
   const scrollTop = window.pageYOffset || ((document: HTMLDocument).documentElement || {} ).scrollTop;
   return { top: rect.top + scrollTop, left: rect.left + scrollLeft }
 }
 
-class Preview extends Component<Props, State> {
+class HTMLPreview extends Component<Props, State> {
   highlighter: ReactRef;
 
   static defaultProps = {
@@ -106,20 +96,20 @@ class Preview extends Component<Props, State> {
   componentDidUpdate(): void {
     if (this.highlighter.current && this.props.changed) {
       setTimeout(() => {
-        const highlighter = this.highlighter.current;
+        const highlighter = this.highlighter.current || {};
         const changedElement: ?HTMLElement = document.getElementById(this.props.changed);
         const elementOffset = offset(changedElement);
         highlighter.style.top = `${elementOffset.top}px`;
         highlighter.style.left = `${elementOffset.left}px`;
         highlighter.style.height = `${(changedElement || {}).offsetHeight}px`;
         highlighter.style.width = `${(changedElement || {}).offsetWidth}px`;
-        this.highlighter.current.style.opacity = 1;
+        highlighter.style.opacity = '1';
       }, 250);
     } else if (this.highlighter.current && !this.props.changed) {
-      this.highlighter.current.style.opacity = 0;
+      this.highlighter.current.style.opacity = '0';
     }
   }
 }
 
 
-export default Preview;
+export default HTMLPreview;

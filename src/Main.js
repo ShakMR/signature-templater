@@ -2,6 +2,9 @@
 import React, { Component, Fragment } from 'react';
 import { withRouter } from 'react-router-dom';
 
+import type { RouterHistory } from 'react-router-dom';
+import type { FilesStorage } from 'types/storage';
+
 import Button from './Components/Button';
 import FileUploadButton from './Components/Button/FileUploadButton';
 import Input, { INPUT_TYPES } from "./Components/Input";
@@ -9,8 +12,6 @@ import LoadFile from './Services/LoadFile';
 import Spinner from './Components/Spinner/Spinner';
 
 import withLocalStorage from './HoC/WithStorageFiles';
-
-import type { ReactRef } from './Types/Ref';
 
 import styles from './Main.module.scss';
 import StoredFileSelectorModal from './Components/Modal/StoredFileSelectorModal';
@@ -22,7 +23,8 @@ type State = {
 }
 
 type Props = {
-  history: any,
+  history: RouterHistory,
+  storage: FilesStorage,
 };
 
 type UploadFileEvent = {
@@ -31,8 +33,10 @@ type UploadFileEvent = {
   },
 };
 
+type InputRef = {| current: null | HTMLInputElement |};
+
 class Main extends Component<Props, State> {
-  inputRef: ReactRef = React.createRef();
+  inputRef: InputRef = React.createRef();
   state: State = {
     filenameSelected: null,
     savingFile: false,
@@ -60,6 +64,7 @@ class Main extends Component<Props, State> {
   };
 
   onURLFinished = (): void => {
+    if (this.inputRef.current) {
       const fileURL: string = this.inputRef.current.value;
       this.setState({
         savingFile: true,
@@ -70,8 +75,9 @@ class Main extends Component<Props, State> {
         this.setState({
           savingFile: false,
           filenameSelected: filename,
-        })
-      })
+        });
+      });
+    }
   };
 
   switchModalState = () => {
@@ -80,14 +86,16 @@ class Main extends Component<Props, State> {
     })
   };
 
-  handleFileSelectedFromStorage = async (filename: string): void => {
+  handleFileSelectedFromStorage = async (filename: string) => {
     this.setState({
       filenameSelected: filename,
     });
   };
 
   navigateForward = () => {
-    this.props.history.go(`/form?file=${this.state.filenameSelected}`);
+    if (this.state.filenameSelected) {
+      this.props.history.push(`/form?file=${this.state.filenameSelected}`);
+    }
   };
 
   render() {

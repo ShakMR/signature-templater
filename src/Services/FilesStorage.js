@@ -1,16 +1,13 @@
 // @flow
-import FilesStorageInterface from './FilesStorageInterface';
-
-class FilesStorage extends FilesStorageInterface {
+class FilesStorage {
   filesIndex: string = 'index';
   storage: Storage;
 
   constructor(storage: Storage) {
-    super();
     this.storage = storage;
   }
 
-  async save(fileName: string, content: string): Promise<> {
+  async save(fileName: string, content: string): Promise<any> {
     this.storage.setItem(fileName, content);
     let filesIndexContent: string = this.storage.getItem(this.filesIndex) || '';
     if (!filesIndexContent) {

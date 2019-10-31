@@ -1,24 +1,6 @@
 // @flow
 import uuid from 'uuid/v4';
-import type { Field } from '../Types/Field';
-
-type ObjectConfigParam = {
-  name: string,
-  related: string,
-  relation: string,
-};
-
-type ConfigValue = {
-  id: string,
-  params: Array<string | ObjectConfigParam>
-};
-
-type ParserConfig = {
-  [key: string]: ConfigValue
-};
-
-type RelationFunction = (any) => { key: string, value: any };
-type BuildRelationFunction = (any, string, string) => RelationFunction;
+import type { Field, BuildRelationFunction, RelationFunction, ObjectConfigParam, ParserConfig } from 'html-parsing';
 
 export default class {
   config: ParserConfig;
@@ -57,11 +39,10 @@ export default class {
     }
     const position = root.innerHTML.indexOf(element.id);
     return params.map((param: string | ObjectConfigParam) => {
-      const paramType = typeof param;
       let ret = { id: element.id, tag, position };
-      if (paramType === 'string') {
+      if (typeof param === 'string') {
         ret = { ...ret, ...this.resolveStringParam(element, param) };
-      } else if (paramType === 'object') {
+      } else {
         ret = { ...ret, ...this.resolveObjectParam(element, param) };
       }
       return ret;
@@ -76,12 +57,12 @@ export default class {
     };
   };
 
-  resolveStringParam(element: any, param: string): Field {
+  resolveStringParam(element: any, param: string): $Shape<Field> {
     const value = element[param].replace(/[\t\n]/g,'');
     return ({ param, value })
   }
 
-  resolveObjectParam(element: any, param: ObjectConfigParam): Field {
+  resolveObjectParam(element: any, param: ObjectConfigParam): $Shape<Field> {
     const value = element[param.name];
     let func: RelationFunction;
     if (Object.getOwnPropertyNames(this).includes(param.relation)) {
