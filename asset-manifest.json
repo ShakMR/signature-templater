@@ -1,0 +1,21 @@
+{
+  "files": {
+    "main.css": "/signature-templater/static/css/main.d583a2a0.chunk.css",
+    "main.js": "/signature-templater/static/js/main.0c69b86d.chunk.js",
+    "main.js.map": "/signature-templater/static/js/main.0c69b86d.chunk.js.map",
+    "runtime-main.js": "/signature-templater/static/js/runtime-main.de765648.js",
+    "runtime-main.js.map": "/signature-templater/static/js/runtime-main.de765648.js.map",
+    "static/js/2.80678444.chunk.js": "/signature-templater/static/js/2.80678444.chunk.js",
+    "static/js/2.80678444.chunk.js.map": "/signature-templater/static/js/2.80678444.chunk.js.map",
+    "index.html": "/signature-templater/index.html",
+    "precache-manifest.c22e48fa88ab3dc32e851bb912c7c273.js": "/signature-templater/precache-manifest.c22e48fa88ab3dc32e851bb912c7c273.js",
+    "service-worker.js": "/signature-templater/service-worker.js",
+    "static/css/main.d583a2a0.chunk.css.map": "/signature-templater/static/css/main.d583a2a0.chunk.css.map"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.de765648.js",
+    "static/js/2.80678444.chunk.js",
+    "static/css/main.d583a2a0.chunk.css",
+    "static/js/main.0c69b86d.chunk.js"
+  ]
+}
