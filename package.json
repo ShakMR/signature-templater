@@ -1,9 +1,12 @@
 {
+  "homepage": "https://shakmr.github.io/signature-templater",
   "name": "signature-templater",
   "version": "0.1.0",
   "private": true,
   "scripts": {
     "build": "react-scripts build",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
     "eject": "react-scripts eject",
     "flow-watch": "fswatch -o ./ | xargs -n1 -I{} sh -c 'clear; printf \"\\033[3J\" && flow'",
     "flow_check": "flow check || exit 0",
@@ -31,6 +34,7 @@
     "bpk-mixins": "^19.0.10",
     "flow-bin": "^0.109.0",
     "flow-typed": "^2.6.2",
+    "gh-pages": "^3.2.3",
     "jest-localstorage-mock": "^2.4.0",
     "nock": "^11.6.0",
     "node-sass": "^4.13.1",
